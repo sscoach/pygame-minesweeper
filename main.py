@@ -35,9 +35,10 @@ def main():
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                quit()
+                quit_game()
                 return
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+                quit_game()
                 return
 
         surface.fill(COLOR_BLACK)
@@ -55,7 +56,7 @@ def main():
         fps.tick(FPS)
 
 
-def quit():
+def quit_game():
     pygame.quit()
     sys.exit()
 
