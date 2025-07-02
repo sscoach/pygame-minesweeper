@@ -18,7 +18,7 @@ def main():
     width = int(SCREEN_WIDTH / LINE_SIZE)
     height = int(SCREEN_HEIGHT / LINE_SIZE)
     board = Board(width, height)
-    board.place_mines(count=60)
+    board.place_mines(count=45)
     board.calculate_numbers()
 
     while True:
