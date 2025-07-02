@@ -1,5 +1,4 @@
 import random
-
 import pygame
 
 from constants import *
@@ -83,24 +82,29 @@ class Board:
         rect = (x * LINE_SIZE, y * LINE_SIZE, LINE_SIZE, LINE_SIZE)
         inner_rect = (x * LINE_SIZE + 1, y * LINE_SIZE + 1, LINE_SIZE - 2, LINE_SIZE - 2)
 
-        pygame.draw.rect(surface, COLOR_LINE, rect, 1)
-        item = self.get_cell((x, y))
+        pygame.draw.rect(surface, COLOR_LINE, rect, 0)
+        number = self.get_cell((x, y))
         state = self.get_state((x, y))
 
-        if state == STATE_NONE:
-            pygame.draw.rect(surface, COLOR_INITIAL, inner_rect, 0)
-        elif state == STATE_OPEN:
-            pygame.draw.rect(surface, COLOR_OPEN, inner_rect, 0)
-        elif state == STATE_MARK:
-            pygame.draw.rect(surface, COLOR_MARK, inner_rect, 0)
-        elif state == STATE_UNKNOWN:
-            pygame.draw.rect(surface, COLOR_UNKNOWN, inner_rect, 0)
+        pygame.draw.rect(surface, COLOR_INITIAL, inner_rect, 0)
 
-        if item != BOARD_MINE:
-            text = self.number_font.render(f"{item}", True, (255, 255, 0), (0, 0, 0))
-            text_rect = text.get_rect(
-                center=(x * LINE_SIZE + LINE_SIZE / 2, y * LINE_SIZE + LINE_SIZE / 2))
-            surface.blit(text, text_rect)
+        if state == STATE_OPEN:
+            pygame.draw.rect(surface, COLOR_OPEN, inner_rect, 0)
+            self.draw_text(surface, (x, y), number, COLOR_TEXT, COLOR_OPEN)
+        elif state == STATE_MARK:
+            self.draw_text(surface, (x, y), state, COLOR_MARK, COLOR_INITIAL)
+        elif state == STATE_UNKNOWN:
+            self.draw_text(surface, (x, y), state, COLOR_MARK, COLOR_INITIAL)
+
+        # if item != BOARD_MINE:
+        #     self.draw_item_text(surface, (x, y), item, COLOR_DEBUG_TEXT)
+
+    def draw_text(self, surface, pos, item, color, background):
+        (x, y) = pos
+        text = self.number_font.render(f"{item}", True, color, background)
+        text_rect = text.get_rect(
+            center=(x * LINE_SIZE + LINE_SIZE / 2, y * LINE_SIZE + LINE_SIZE / 2))
+        surface.blit(text, text_rect)
 
     def open(self, pos):
         (x, y) = pos
