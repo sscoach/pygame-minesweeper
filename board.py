@@ -132,4 +132,43 @@ class Board:
         elif state == STATE_UNKNOWN:
             self.set_state(pos, STATE_NONE)
         elif state == STATE_OPEN:
-            print("check count of mine and open around")
+            self.chording(pos)
+
+    def chording(self, pos):
+        number = self.get_cell(pos)
+        if self.count_flagged_neighbors(pos) == number:
+            self.open_not_flagged_neighbors(pos)
+
+    def count_flagged_neighbors(self, pos):
+        (x, y) = pos
+
+        result = 0
+        for dx in [-1, 0, 1]:
+            for dy in [-1, 0, 1]:
+                if dx == 0 and dy == 0:
+                    continue
+                try:
+                    new_pos = (x + dx, y + dy)
+                    if self.get_state(new_pos) == STATE_MARK:
+                        result += 1
+                    elif self.get_state(new_pos) == STATE_UNKNOWN:
+                        return 0
+                except IndexError:
+                    print(f"index error {x + dx}, {y + dy}")
+                    pass
+        return result
+
+    def open_not_flagged_neighbors(self, pos):
+        (x, y) = pos
+
+        for dx in [-1, 0, 1]:
+            for dy in [-1, 0, 1]:
+                if dx == 0 and dy == 0:
+                    continue
+                try:
+                    new_pos = (x + dx, y + dy)
+                    if self.get_state(new_pos) == STATE_NONE:
+                        self.open(new_pos)
+                except IndexError:
+                    print(f"index error {x + dx}, {y + dy}")
+                    pass
