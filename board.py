@@ -1,5 +1,7 @@
 import random
 
+import pygame
+
 from constants import *
 
 
@@ -8,6 +10,7 @@ class Board:
         self.width = width
         self.height = height
         self.cells = [[None for x in range(width)] for y in range(height)]
+        self.number_font = pygame.font.Font(None, 15)
 
     def is_mine(self, x, y):
         if x < 0 or x >= self.width or y < 0 or y >= self.height:
@@ -49,3 +52,18 @@ class Board:
                 number = self.get_mine_number_around(x, y)
                 if number is not None:
                     self.set_cell(x, y, number)
+
+    def draw(self, surface):
+        for y in range(self.height):
+            for x in range(self.width):
+                rect = (x * LINE_SIZE, y * LINE_SIZE, LINE_SIZE, LINE_SIZE)
+                pygame.draw.rect(surface, COLOR_LINE, rect, 1)
+                item = self.get_cell(x, y)
+                if item == BOARD_MINE:
+                    rect = (x * LINE_SIZE + 1, y * LINE_SIZE + 1, LINE_SIZE - 2, LINE_SIZE - 2)
+                    pygame.draw.rect(surface, COLOR_MINE, rect, 0)
+                else:
+                    text = self.number_font.render(f"{item}", True, (255, 255, 0), (0, 0, 0))
+                    text_rect = text.get_rect(
+                        center=(x * LINE_SIZE + LINE_SIZE / 2, y * LINE_SIZE + LINE_SIZE / 2))
+                    surface.blit(text, text_rect)
