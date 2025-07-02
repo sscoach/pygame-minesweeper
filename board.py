@@ -17,7 +17,7 @@ class Board:
         self.width = width
         self.height = height
         self.cells = [[None for x in range(width)] for y in range(height)]
-        self.state = [[None for x in range(width)] for y in range(height)]
+        self.state = [[STATE_NONE for x in range(width)] for y in range(height)]
         self.number_font = pygame.font.Font(None, 15)
 
     def is_mine(self, pos):
@@ -87,7 +87,7 @@ class Board:
         item = self.get_cell((x, y))
         state = self.get_state((x, y))
 
-        if state is None:
+        if state == STATE_NONE:
             pygame.draw.rect(surface, COLOR_INITIAL, inner_rect, 0)
         elif state == STATE_OPEN:
             pygame.draw.rect(surface, COLOR_OPEN, inner_rect, 0)
@@ -95,8 +95,6 @@ class Board:
             pygame.draw.rect(surface, COLOR_MARK, inner_rect, 0)
         elif state == STATE_UNKNOWN:
             pygame.draw.rect(surface, COLOR_UNKNOWN, inner_rect, 0)
-
-
 
         if item != BOARD_MINE:
             text = self.number_font.render(f"{item}", True, (255, 255, 0), (0, 0, 0))
@@ -108,7 +106,7 @@ class Board:
         (x, y) = pos
         if x < 0 or self.width <= x: return False
         if y < 0 or self.height <= y: return False
-        if self.get_state(pos) is not None: return False
+        if self.get_state(pos) != STATE_NONE: return False
 
         print(f"open: {pos[0]} {pos[1]}")
         self.set_state(pos, STATE_OPEN)
