@@ -4,8 +4,12 @@ import pygame
 
 from constants import *
 
-STATE_OPEN = "O"
 BOARD_MINE = "M"
+
+STATE_NONE = None
+STATE_MARK = "X"
+STATE_UNKNOWN = "?"
+STATE_OPEN = "O"
 
 
 class Board:
@@ -87,6 +91,12 @@ class Board:
             pygame.draw.rect(surface, COLOR_INITIAL, inner_rect, 0)
         elif state == STATE_OPEN:
             pygame.draw.rect(surface, COLOR_OPEN, inner_rect, 0)
+        elif state == STATE_MARK:
+            pygame.draw.rect(surface, COLOR_MARK, inner_rect, 0)
+        elif state == STATE_UNKNOWN:
+            pygame.draw.rect(surface, COLOR_UNKNOWN, inner_rect, 0)
+
+
 
         if item != BOARD_MINE:
             text = self.number_font.render(f"{item}", True, (255, 255, 0), (0, 0, 0))
@@ -95,7 +105,6 @@ class Board:
             surface.blit(text, text_rect)
 
     def open(self, pos):
-
         (x, y) = pos
         if x < 0 or self.width <= x: return False
         if y < 0 or self.height <= y: return False
@@ -114,5 +123,15 @@ class Board:
 
         return False
 
-    def open_around(self, pos):
-        print(f"open_around: {pos[0]} {pos[1]}")
+    def mark(self, pos):
+        (x, y) = pos
+        print(f"mark: {x} {y}")
+        state = self.get_state(pos)
+        if state == STATE_NONE:
+            self.set_state(pos, STATE_MARK)
+        elif state == STATE_MARK:
+            self.set_state(pos, STATE_UNKNOWN)
+        elif state == STATE_UNKNOWN:
+            self.set_state(pos, STATE_NONE)
+        elif state == STATE_OPEN:
+            print("check count of mine and open around")
