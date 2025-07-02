@@ -18,7 +18,7 @@ def main():
     width = int(SCREEN_WIDTH / LINE_SIZE)
     height = int(SCREEN_HEIGHT / LINE_SIZE)
     board = Board(width, height)
-    board.place_mines(count=30)
+    board.place_mines(count=60)
     board.calculate_numbers()
 
     while True:
@@ -34,9 +34,19 @@ def main():
                 pos = (event.pos[0] // LINE_SIZE, event.pos[1] // LINE_SIZE)
                 game_over = False
                 if event.button == pygame.BUTTON_LEFT:
-                    game_over = board.open(pos)
+                    mods = pygame.key.get_mods()
+                    if mods & pygame.KMOD_SHIFT:
+                        game_over = board.chording(pos)
+                    else:
+                        game_over = board.open(pos)
                 elif event.button == pygame.BUTTON_RIGHT:
                     game_over = board.mark(pos)
+                else:
+                    buttons = pygame.mouse.get_pressed()
+                    if buttons[0] and buttons[2]:
+                        game_over = board.chording(pos)
+                if game_over:
+                    print("GAME IS OVER")
 
 
         surface.fill(COLOR_BLACK)
