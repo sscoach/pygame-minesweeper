@@ -29,6 +29,13 @@ def main():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 quit_game()
                 return
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                print(f"MOUSEBUTTONDOWN: {event.pos} {event.button} {event.touch} {event.window}")
+                pos = (event.pos[0] // LINE_SIZE, event.pos[1] // LINE_SIZE)
+                if event.button == pygame.BUTTON_LEFT:
+                    game_over = board.open(pos)
+                elif event.button == pygame.BUTTON_RIGHT:
+                    game_over = board.open_around(pos)
 
         surface.fill(COLOR_BLACK)
 

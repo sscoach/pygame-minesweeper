@@ -67,3 +67,9 @@ class Board:
                     text_rect = text.get_rect(
                         center=(x * LINE_SIZE + LINE_SIZE / 2, y * LINE_SIZE + LINE_SIZE / 2))
                     surface.blit(text, text_rect)
+
+    def open(self, pos):
+        print(f"open: {pos[0]} {pos[1]}")
+
+    def open_around(self, pos):
+        print(f"open_around: {pos[0]} {pos[1]}")
