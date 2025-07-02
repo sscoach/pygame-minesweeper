@@ -95,8 +95,24 @@ class Board:
             surface.blit(text, text_rect)
 
     def open(self, pos):
+
+        (x, y) = pos
+        if x < 0 or self.width <= x: return False
+        if y < 0 or self.height <= y: return False
+        if self.get_state(pos) is not None: return False
+
         print(f"open: {pos[0]} {pos[1]}")
         self.set_state(pos, STATE_OPEN)
+        if self.is_mine(pos): return True
+
+        if self.get_cell(pos) == 0:
+            for dx in range(-1, 2):
+                for dy in range(-1, 2):
+                    if dx == 0 and dy == 0:
+                        continue
+                    self.open((x + dx, y + dy))
+
+        return False
 
     def open_around(self, pos):
         print(f"open_around: {pos[0]} {pos[1]}")
