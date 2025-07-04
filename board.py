@@ -3,7 +3,10 @@ import pygame
 
 from constants import *
 
-BOARD_MINE = "M"
+# 💣💥☀✴🧨☠︎︎👊🎯👾🚀🎮👽💯🛢
+# https://emojidb.org/
+BOARD_MINE = "💣"
+MINE_EXPLOSION = "💥"
 
 STATE_NONE = None
 STATE_MARK = "X"
@@ -17,7 +20,9 @@ class Board:
         self.height = height
         self.cells = [[None for x in range(width)] for y in range(height)]
         self.state = [[STATE_NONE for x in range(width)] for y in range(height)]
-        self.number_font = pygame.font.Font(None, 15)
+        self.number_font = pygame.font.Font(None, 17)
+        self.emoji_font = pygame.font.Font("assets/fonts/NotoEmoji-VariableFont_wght.ttf", 10)
+        # https://fonts.google.com/
 
     def is_mine(self, pos):
         (x, y) = pos
@@ -90,18 +95,32 @@ class Board:
 
         if state == STATE_OPEN:
             pygame.draw.rect(surface, COLOR_OPEN, inner_rect, 0)
-            self.draw_text(surface, (x, y), number, COLOR_TEXT, COLOR_OPEN)
+            if number == BOARD_MINE:
+                self.draw_emoji(surface, (x, y), MINE_EXPLOSION, COLOR_MINE, None)
+            else:
+                self.draw_text(surface, (x, y), number, COLOR_TEXT, None)
+
         elif state == STATE_MARK:
             self.draw_text(surface, (x, y), state, COLOR_MARK, COLOR_INITIAL)
         elif state == STATE_UNKNOWN:
             self.draw_text(surface, (x, y), state, COLOR_MARK, COLOR_INITIAL)
 
+        if state == STATE_NONE and number == BOARD_MINE:
+            self.draw_emoji(surface, (x, y), number, COLOR_TEXT, None)
+
         # if item != BOARD_MINE:
         #     self.draw_item_text(surface, (x, y), item, COLOR_DEBUG_TEXT)
 
-    def draw_text(self, surface, pos, item, color, background):
+    def draw_text(self, surface, pos, text, color, background):
         (x, y) = pos
-        text = self.number_font.render(f"{item}", True, color, background)
+        text = self.number_font.render(f"{text}", True, color, background)
+        text_rect = text.get_rect(
+            center=(x * LINE_SIZE + LINE_SIZE / 2, y * LINE_SIZE + LINE_SIZE / 2))
+        surface.blit(text, text_rect)
+
+    def draw_emoji(self, surface, pos, text, color, background):
+        (x, y) = pos
+        text = self.emoji_font.render(f"{text}", True, color, background)
         text_rect = text.get_rect(
             center=(x * LINE_SIZE + LINE_SIZE / 2, y * LINE_SIZE + LINE_SIZE / 2))
         surface.blit(text, text_rect)
