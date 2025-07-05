@@ -9,3 +9,5 @@
 
 - [X] board - [0, 1, 2, ..., 9, "M", ]
 - [X] state - [None, "X", "?", "O"]
+- [ ] reactive size
+- 
