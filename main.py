@@ -46,23 +46,17 @@ def main():
 
 
 def render_game_over(surface, font):
-    text_surface = font.render("Try again?", False, COLOR_GAME_OVER_TEXT,
-                               COLOR_GAME_OVER_BACKGROUND)
-    text_surface_rect = text_surface.get_rect()
-    text_surface_rect.center = (
-        SCREEN_WIDTH // 2,
-        SCREEN_HEIGHT // 2 - 25,
-    )
-    surface.blit(text_surface, text_surface_rect)
+    lines = ["Try again?", "Click to retry"]
 
-    text_surface = font.render("Click to retry", False, COLOR_GAME_OVER_TEXT,
-                               COLOR_GAME_OVER_BACKGROUND)
-    text_surface_rect = text_surface.get_rect()
-    text_surface_rect.center = (
-        SCREEN_WIDTH // 2,
-        SCREEN_HEIGHT // 2 + 25,
-    )
-    surface.blit(text_surface, text_surface_rect)
+    x = SCREEN_WIDTH // 2
+    y = SCREEN_HEIGHT // 2 - 25
+    for line in lines:
+        text_surface = font.render(line, False, COLOR_GAME_OVER_TEXT,
+                                   COLOR_GAME_OVER_BACKGROUND)
+        text_surface_rect = text_surface.get_rect()
+        text_surface_rect.center = (x, y)
+        surface.blit(text_surface, text_surface_rect)
+        y += 50
 
 
 def quit_game():
