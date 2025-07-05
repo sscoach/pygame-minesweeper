@@ -77,12 +77,12 @@ class Board:
                 if number is not None:
                     self.set_cell((x, y), number)
 
-    def draw(self, surface):
+    def draw(self, surface, game_over):
         for y in range(self.height):
             for x in range(self.width):
-                self.draw_cell(surface, (x, y))
+                self.draw_cell(surface, (x, y), game_over)
 
-    def draw_cell(self, surface, pos):
+    def draw_cell(self, surface, pos, game_over):
         (x, y) = pos
         rect = (x * LINE_SIZE, y * LINE_SIZE, LINE_SIZE, LINE_SIZE)
         inner_rect = (x * LINE_SIZE + 1, y * LINE_SIZE + 1, LINE_SIZE - 2, LINE_SIZE - 2)
@@ -105,8 +105,9 @@ class Board:
         elif state == STATE_UNKNOWN:
             self.draw_text(surface, (x, y), state, COLOR_MARK, COLOR_INITIAL)
 
-        if state == STATE_NONE and number == BOARD_MINE:
-            self.draw_emoji(surface, (x, y), number, COLOR_TEXT, None)
+        if game_over:
+            if state == STATE_NONE and number == BOARD_MINE:
+                self.draw_emoji(surface, (x, y), number, COLOR_TEXT, None)
 
         # if item != BOARD_MINE:
         #     self.draw_item_text(surface, (x, y), item, COLOR_DEBUG_TEXT)
