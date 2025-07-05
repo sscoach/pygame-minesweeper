@@ -30,6 +30,8 @@ def main():
                 if not game_over:
                     pos = (event.pos[0] // LINE_SIZE, event.pos[1] // LINE_SIZE)
                     game_over = board.handle_click(event, pos)
+                    if board.is_clear():
+                        game_over = True
                 else:
                     game_over = False
                     board.init(count=45)

@@ -20,6 +20,8 @@ class Board:
         self.height = height
         self.cells = None
         self.state = None
+        self.open_count = 0
+        self.mine_count = 0
         self.number_font = pygame.font.Font(None, 17)
         self.emoji_font = pygame.font.Font("assets/fonts/NotoEmoji-VariableFont_wght.ttf", 10)
         # https://fonts.google.com/
@@ -27,6 +29,8 @@ class Board:
     def init(self, count):
         self.cells = [[None for x in range(self.width)] for y in range(self.height)]
         self.state = [[STATE_NONE for x in range(self.width)] for y in range(self.height)]
+        self.open_count = 0
+        self.mine_count = count
         self.place_mines(count=count)
         self.calculate_numbers()
 
@@ -141,6 +145,7 @@ class Board:
         print(f"open: {pos[0]} {pos[1]}")
         self.set_state(pos, STATE_OPEN)
         if self.is_mine(pos): return True
+        self.open_count += 1
 
         if self.get_cell(pos) == 0:
             for dx in range(-1, 2):
@@ -216,3 +221,6 @@ class Board:
             else:
                 self.mark(pos)
         return False
+
+    def is_clear(self):
+        return self.open_count == self.width * self.height - self.mine_count
