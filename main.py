@@ -5,16 +5,12 @@ import pygame
 from board import Board
 from constants import *
 
-pygame.init()
-
-surface = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-
-pygame.display.set_caption("Minesweeper pygame")
-
-fps = pygame.time.Clock()
-
 
 def main():
+    pygame.init()
+    surface = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption("Minesweeper pygame")
+    fps = pygame.time.Clock()
     width = int(SCREEN_WIDTH / LINE_SIZE)
     height = int(SCREEN_HEIGHT / LINE_SIZE)
     board = Board(width, height)
