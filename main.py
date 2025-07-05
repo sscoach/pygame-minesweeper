@@ -14,7 +14,7 @@ def main():
     width = int(SCREEN_WIDTH / LINE_SIZE)
     height = int(SCREEN_HEIGHT / LINE_SIZE)
     board = Board(width, height)
-    board.init(count=45)
+    board.init(count=MINE_COUNT)
     font = pygame.font.Font(None, 40)
     game_over = False
 
@@ -34,7 +34,7 @@ def main():
                         game_over = True
                 else:
                     game_over = False
-                    board.init(count=45)
+                    board.init(count=MINE_COUNT)
 
         surface.fill(COLOR_BLACK)
 
