@@ -20,6 +20,7 @@ def main():
     board = Board(width, height)
     board.place_mines(count=45)
     board.calculate_numbers()
+    font = pygame.font.Font(None, 40)
     game_over = False
 
     while True:
@@ -40,10 +41,27 @@ def main():
         surface.fill(COLOR_BLACK)
 
         board.draw(surface, game_over)
+        if game_over:
+            render_game_over(surface, font)
 
         pygame.display.flip()
 
         fps.tick(FPS)
+
+
+def render_game_over(surface, font):
+    text_surface = font.render(
+        "Game Over",
+        False,
+        COLOR_GAME_OVER_TEXT,
+        COLOR_GAME_OVER_BACKGROUND,
+    )
+    text_surface_rect = text_surface.get_rect()
+    text_surface_rect.center = (
+        SCREEN_WIDTH // 2,
+        SCREEN_HEIGHT // 2,
+    )
+    surface.blit(text_surface, text_surface_rect)
 
 
 def quit_game():
