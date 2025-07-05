@@ -146,8 +146,6 @@ class Board:
         return False
 
     def mark(self, pos):
-        (x, y) = pos
-        print(f"mark: {x} {y}")
         state = self.get_state(pos)
         if state == STATE_NONE:
             self.set_state(pos, STATE_MARK)
@@ -155,6 +153,9 @@ class Board:
             self.set_state(pos, STATE_UNKNOWN)
         elif state == STATE_UNKNOWN:
             self.set_state(pos, STATE_NONE)
+
+    def is_open(self, pos):
+        return self.get_state(pos) == STATE_OPEN
 
     def chording(self, pos):
         if self.get_state(pos) != STATE_OPEN: return False

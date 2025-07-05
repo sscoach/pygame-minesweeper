@@ -34,20 +34,14 @@ def main():
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     pos = (event.pos[0] // LINE_SIZE, event.pos[1] // LINE_SIZE)
                     if event.button == pygame.BUTTON_LEFT:
-                        mods = pygame.key.get_mods()
-                        if mods & pygame.KMOD_SHIFT:
-                            game_over = board.chording(pos)
-                        else:
-                            game_over = board.open(pos)
+                        game_over = board.open(pos)
                     elif event.button == pygame.BUTTON_RIGHT:
-                        game_over = board.mark(pos)
-                    else:
-                        buttons = pygame.mouse.get_pressed()
-                        if buttons[0] and buttons[2]:
-                            game_over = board.chording(pos)
+                        if board.is_open(pos):
+                            board.chording(pos)
+                        else:
+                            board.mark(pos)
             else:
                 pass
-
 
         surface.fill(COLOR_BLACK)
 
