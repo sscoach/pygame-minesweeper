@@ -48,7 +48,7 @@ def main():
 
 
 def render_game_over(surface, font, board):
-    lines = ["You Win" if board.is_clear() else "Game Over", "Click to retry"]
+    lines = [f"Score: {board.score}" if board.is_clear() else "Game Over", "Click to retry"]
 
     x = SCREEN_WIDTH // 2
     y = SCREEN_HEIGHT // 2 - 25

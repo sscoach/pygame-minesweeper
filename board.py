@@ -18,6 +18,7 @@ class Board:
     def __init__(self, width, height):
         self.width = width
         self.height = height
+        self.score = 0
         self.cells = None
         self.state = None
         self.open_count = 0
@@ -27,6 +28,7 @@ class Board:
         # https://fonts.google.com/
 
     def init(self, count):
+        self.score = 0
         self.cells = [[None for x in range(self.width)] for y in range(self.height)]
         self.state = [[STATE_NONE for x in range(self.width)] for y in range(self.height)]
         self.open_count = 0
@@ -145,6 +147,7 @@ class Board:
         print(f"open: {pos[0]} {pos[1]}")
         self.set_state(pos, STATE_OPEN)
         if self.is_mine(pos): return True
+        self.score += SCORE_OPEN
         self.open_count += 1
 
         if self.get_cell(pos) == 0:
@@ -157,6 +160,7 @@ class Board:
         return False
 
     def mark(self, pos):
+        self.score += SCORE_MARK
         state = self.get_state(pos)
         if state == STATE_NONE:
             self.set_state(pos, STATE_MARK)
@@ -171,6 +175,7 @@ class Board:
     def chording(self, pos):
         if self.get_state(pos) != STATE_OPEN: return False
 
+        self.score += SCORE_CHORDING
         number = self.get_cell(pos)
         if self.count_flagged_neighbors(pos) == number:
             return self.open_not_flagged_neighbors(pos)
