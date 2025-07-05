@@ -33,13 +33,7 @@ def main():
             if not game_over:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     pos = (event.pos[0] // LINE_SIZE, event.pos[1] // LINE_SIZE)
-                    if event.button == pygame.BUTTON_LEFT:
-                        game_over = board.open(pos)
-                    elif event.button == pygame.BUTTON_RIGHT:
-                        if board.is_open(pos):
-                            board.chording(pos)
-                        else:
-                            board.mark(pos)
+                    game_over = board.handle_click(event, pos)
             else:
                 pass
 

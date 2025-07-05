@@ -200,3 +200,13 @@ class Board:
                     print(f"index error {x + dx}, {y + dy}")
                     pass
         return False
+
+    def handle_click(self, event, pos):
+        if event.button == pygame.BUTTON_LEFT:
+            return self.open(pos)
+        elif event.button == pygame.BUTTON_RIGHT:
+            if self.is_open(pos):
+                return self.chording(pos)
+            else:
+                self.mark(pos)
+        return False
