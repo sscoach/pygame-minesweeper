@@ -40,15 +40,15 @@ def main():
 
         board.draw(surface, game_over)
         if game_over:
-            render_game_over(surface, font)
+            render_game_over(surface, font, board)
 
         pygame.display.flip()
 
         fps.tick(FPS)
 
 
-def render_game_over(surface, font):
-    lines = ["Try again?", "Click to retry"]
+def render_game_over(surface, font, board):
+    lines = ["You Win" if board.is_clear() else "Game Over", "Click to retry"]
 
     x = SCREEN_WIDTH // 2
     y = SCREEN_HEIGHT // 2 - 25
