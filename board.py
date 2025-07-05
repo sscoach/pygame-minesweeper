@@ -18,17 +18,17 @@ class Board:
     def __init__(self, width, height):
         self.width = width
         self.height = height
-        self.cells = [[None for x in range(width)] for y in range(height)]
-        self.state = [[STATE_NONE for x in range(width)] for y in range(height)]
+        self.cells = None
+        self.state = None
         self.number_font = pygame.font.Font(None, 17)
         self.emoji_font = pygame.font.Font("assets/fonts/NotoEmoji-VariableFont_wght.ttf", 10)
         # https://fonts.google.com/
 
-    def is_mine(self, pos):
-        (x, y) = pos
-        if x < 0 or x >= self.width or y < 0 or y >= self.height:
-            return False
-        return self.cells[y][x] == BOARD_MINE
+    def init(self, count):
+        self.cells = [[None for x in range(self.width)] for y in range(self.height)]
+        self.state = [[STATE_NONE for x in range(self.width)] for y in range(self.height)]
+        self.place_mines(count=count)
+        self.calculate_numbers()
 
     def place_mines(self, count):
         placed = 0
@@ -40,6 +40,12 @@ class Board:
             if not self.is_mine((x, y)):
                 self.set_cell((x, y), BOARD_MINE)
                 placed += 1
+
+    def is_mine(self, pos):
+        (x, y) = pos
+        if x < 0 or x >= self.width or y < 0 or y >= self.height:
+            return False
+        return self.cells[y][x] == BOARD_MINE
 
     def set_state(self, pos, value):
         (x, y) = pos

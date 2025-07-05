@@ -14,8 +14,7 @@ def main():
     width = int(SCREEN_WIDTH / LINE_SIZE)
     height = int(SCREEN_HEIGHT / LINE_SIZE)
     board = Board(width, height)
-    board.place_mines(count=45)
-    board.calculate_numbers()
+    board.init(count=45)
     font = pygame.font.Font(None, 40)
     game_over = False
 
@@ -27,12 +26,13 @@ def main():
             if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 quit_game()
                 return
-            if not game_over:
-                if event.type == pygame.MOUSEBUTTONDOWN:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if not game_over:
                     pos = (event.pos[0] // LINE_SIZE, event.pos[1] // LINE_SIZE)
                     game_over = board.handle_click(event, pos)
-            else:
-                pass
+                else:
+                    game_over = False
+                    board.init(count=45)
 
         surface.fill(COLOR_BLACK)
 
