@@ -113,8 +113,6 @@ class Board:
         if mine == 0:
             for y_delta in [-1, 0, 1]:
                 for x_delta in [-1, 0, 1]:
-                    if y_delta == 0 and x_delta == 0: continue
-
                     try:
                         new_pos = (x + x_delta, y + y_delta)
                         self.open(new_pos)
