@@ -46,12 +46,12 @@ class Board:
 
         for y_delta in [-1, 0, 1]:
             for x_delta in [-1, 0, 1]:
-                try:
-                    value = self.mine_field[y_delta + y][x_delta + x]
-                    if value == FIELD_MINE:
-                        result += 1
-                except IndexError:
-                    pass
+                pos = (x + x_delta, y + y_delta)
+                if not self.is_valid_position(pos): continue
+
+                value = self.mine_field[pos[1]][pos[0]]
+                if value == FIELD_MINE:
+                    result += 1
 
         return result
 
@@ -102,6 +102,8 @@ class Board:
             self.mark(index_pos)
 
     def open(self, index_pos):
+        if not self.is_valid_position(index_pos): return
+
         x, y = index_pos
         state = self.state_field[y][x]
         if state != STATE_HIDDEN: return
@@ -112,11 +114,8 @@ class Board:
         if mine == 0:
             for y_delta in [-1, 0, 1]:
                 for x_delta in [-1, 0, 1]:
-                    try:
-                        new_pos = (x + x_delta, y + y_delta)
-                        self.open(new_pos)
-                    except IndexError:
-                        pass
+                    new_pos = (x + x_delta, y + y_delta)
+                    self.open(new_pos)
 
     def mark(self, index_pos):
         x, y = index_pos
@@ -127,3 +126,9 @@ class Board:
             self.state_field[y][x] = STATE_QUESTION
         elif state == STATE_QUESTION:
             self.state_field[y][x] = STATE_HIDDEN
+
+    def is_valid_position(self, pos):
+        x, y = pos
+        if x < 0 or self.columns <= x: return False
+        if y < 0 or self.rows <= y: return False
+        return True
