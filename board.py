@@ -4,14 +4,22 @@ from const import *
 
 
 class Board:
-    def __init__(self):
+    def __init__(self, columns, rows):
+        self.columns = columns
+        self.rows = rows
+
+        self.size = min(int(SCREEN_HEIGHT / self.rows), int(SCREEN_WIDTH / self.columns))
+        self.start_x = SCREEN_WIDTH / 2 - (self.size * self.columns) / 2
+        self.start_y = SCREEN_HEIGHT / 2 - (self.size * self.rows) / 2
+        self.width = self.size * self.columns
+        self.height = self.size * self.rows
 
         self.mine_field = [
-            [None for _ in range(9)] for _ in range(9)
+            [None for _ in range(self.columns)] for _ in range(self.rows)
         ]
 
         self.state_field = [
-            [STATE_HIDDEN for _ in range(9)] for _ in range(9)
+            [STATE_HIDDEN for _ in range(self.columns)] for _ in range(self.rows)
         ]
 
         self.font = pygame.font.Font(None, 17)
@@ -19,14 +27,14 @@ class Board:
         max_mine_count = 10
         mine_count = 0
         while mine_count < max_mine_count:
-            x = random.randrange(0, 9)
-            y = random.randrange(0, 9)
+            x = random.randrange(0, self.columns)
+            y = random.randrange(0, self.rows)
             if self.mine_field[y][x] is None:
                 self.mine_field[y][x] = FIELD_MINE
                 mine_count += 1
 
-        for y in range(9):
-            for x in range(9):
+        for y in range(self.rows):
+            for x in range(self.columns):
                 if self.mine_field[y][x] is None:
                     mine_count = self.calculate_mine_count(x, y)
                     self.mine_field[y][x] = mine_count
@@ -48,16 +56,12 @@ class Board:
         return result
 
     def draw(self, surface):
-        size = int(SCREEN_HEIGHT / 9)
-        start_x = SCREEN_WIDTH / 2 - (size * 9) / 2
-        start_y = SCREEN_HEIGHT / 2 - (size * 9) / 2
-
-        for y in range(9):
-            for x in range(9):
-                rect = (start_x + x * size, start_y + y * size, size + 1, size + 1)
+        for y in range(self.rows):
+            for x in range(self.columns):
+                rect = pygame.Rect(self.start_x + x * self.size, self.start_y + y * self.size, self.size + 1, self.size + 1)
                 pygame.draw.rect(surface, WHITE, rect, 1)
 
-                fill_rect = (start_x + x * size + 2, start_y + y * size + 2, size + 1 - 3, size + 1 - 3)
+                fill_rect = rect.inflate(-3, -3).move(1, 1)
                 state = self.state_field[y][x]
                 pygame.draw.rect(surface, GREY, fill_rect, 0)
 
@@ -73,28 +77,22 @@ class Board:
 
     def draw_text(self, surface, pos, title, color):
         x, y = pos
-        size = int(SCREEN_HEIGHT / 9)
-        start_x = SCREEN_WIDTH / 2 - (size * 9) / 2
-        start_y = SCREEN_HEIGHT / 2 - (size * 9) / 2
 
         text = self.font.render(f"{title}", True, color, None)
         text_rect = text.get_rect(
-            center=(start_x + x * size + size / 2, start_y + y * size + size / 2))
+            center=(self.start_x + x * self.size + self.size / 2, self.start_y + y * self.size + self.size / 2))
         surface.blit(text, text_rect)
 
     def on_click(self, pos, button):
-        size = int(SCREEN_HEIGHT / 9)
-        start_x = SCREEN_WIDTH / 2 - (size * 9) / 2
-        start_y = SCREEN_HEIGHT / 2 - (size * 9) / 2
-        relative_pos = (pos[0] - start_x, pos[1] - start_y)
+        relative_pos = (pos[0] - self.start_x, pos[1] - self.start_y)
 
         if relative_pos[0] < 0: return
         if relative_pos[1] < 0: return
 
-        if size * 9 < relative_pos[0]: return
-        if size * 9 < relative_pos[1]: return
+        if self.width < relative_pos[0]: return
+        if self.height < relative_pos[1]: return
 
-        index_pos = (int(relative_pos[0] / size), int(relative_pos[1] / size))
+        index_pos = (int(relative_pos[0] / self.size), int(relative_pos[1] / self.size))
 
         if button == pygame.BUTTON_LEFT:
             self.open(index_pos)

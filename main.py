@@ -11,7 +11,7 @@ def main():
 
     fps = pygame.time.Clock()
 
-    board = Board()
+    board = Board(9, 9)
 
     running = True
 
