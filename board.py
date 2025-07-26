@@ -58,7 +58,7 @@ class Board:
     def draw(self, surface):
         for y in range(self.rows):
             for x in range(self.columns):
-                rect = pygame.Rect(self.start_x + x * self.size, self.start_y + y * self.size, self.size + 1, self.size + 1)
+                rect = self.get_cell_bound(x, y)
                 pygame.draw.rect(surface, WHITE, rect, 1)
 
                 fill_rect = rect.inflate(-3, -3).move(1, 1)
@@ -74,13 +74,15 @@ class Board:
                 else:
                     self.draw_text(surface, (x, y), state, BLACK)
 
+    def get_cell_bound(self, x, y):
+        return pygame.Rect(self.start_x + x * self.size, self.start_y + y * self.size,
+                           self.size + 1, self.size + 1)
 
     def draw_text(self, surface, pos, title, color):
         x, y = pos
 
         text = self.font.render(f"{title}", True, color, None)
-        text_rect = text.get_rect(
-            center=(self.start_x + x * self.size + self.size / 2, self.start_y + y * self.size + self.size / 2))
+        text_rect = text.get_rect(center=self.get_cell_bound(x, y).center)
         surface.blit(text, text_rect)
 
     def on_click(self, pos, button):
@@ -99,7 +101,6 @@ class Board:
         elif button == pygame.BUTTON_RIGHT:
             self.mark(index_pos)
 
-
     def open(self, index_pos):
         x, y = index_pos
         state = self.state_field[y][x]
@@ -117,7 +118,6 @@ class Board:
                     except IndexError:
                         pass
 
-
     def mark(self, index_pos):
         x, y = index_pos
         state = self.state_field[y][x]
@@ -127,5 +127,3 @@ class Board:
             self.state_field[y][x] = STATE_QUESTION
         elif state == STATE_QUESTION:
             self.state_field[y][x] = STATE_HIDDEN
-
-
